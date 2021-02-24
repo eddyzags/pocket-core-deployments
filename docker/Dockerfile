@@ -55,11 +55,13 @@ FROM alpine:3.10
 COPY --from=builder /bin/pocket /bin/pocket
 COPY entrypoint.sh /tmp/
 COPY command.sh /tmp/
+COPY wait.sh /tmp/
+
 RUN apk add --update --no-cache expect bash leveldb-dev
 # Create app user and add permissions
 RUN addgroup --gid 1001 -S app \
 	&& adduser --uid 1005 -S -G app app
-RUN mv /tmp/entrypoint.sh /home/app/ && mv /tmp/command.sh /home/app/command.sh && chown -R app /bin/pocket  && mkdir -p /home/app/.pocket/config && chown -R app /home/app/.pocket
+RUN mv /tmp/entrypoint.sh /home/app/ && mv /tmp/command.sh /home/app/command.sh && mv /tmp/wait.sh /home/app/wait.sh && chown -R app /bin/pocket  && mkdir -p /home/app/.pocket/config && chown -R app /home/app/.pocket
 USER app
 
 # Setup the WORKDIR with app user
